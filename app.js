@@ -1,27 +1,38 @@
 let input = document.querySelector("#input");
 
 let coctailCenter = document.querySelector("#coctailCenter");
+let loader = document.querySelector(".loader");
 
-function createTodos(data) {
-  data.forEach(() => {
-    let li = document.createElement("li");
-    li.classList.add("list-item");
+fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=")
+  .then((res) => res.json())
+  .then((data) => {
+    loader.classList.add("hidden")
+    createDrinks(data.drinks)});
 
-    li.innerHTML = `
-    <article class="cocktail">
+function createDrinks(drinks) {
+  drinks.forEach(({idDrink ,strDrinkThumb , strDrink  ,  strGlass , strAlcoholic  }) => {
+    let article = document.createElement("article");
+    article.classList.add("coctail");
+
+    article.innerHTML = `
+    
     <div class="img-container">
-    <img src="${strDrinkThumb}" alt="A1">
+    <img src=${strDrinkThumb} alt="${strDrink}">
     </div>
     <div class="cocktail-footer">
-    <h3>${data.strDrink}</h3>
-    <h4>${data.strGlass}</h4>
-    <p>${data.strAlcoholic}</p>
-    <a class="btn btn-primary btn-details" href="/cocktail/17222">details</a></div></article>
+    <h3>${strDrink}</h3>
+    <h4>${strGlass}</h4>
+    <p>${strAlcoholic}</p>
+    <a class="btn btn-primary btn-details" href="./about.html?id=${idDrink}">details</a></div>
     `;
 
-    coctailCenter.appendChild("li");
+    coctailCenter.appendChild(article);
+    
   });
+  
 }
-fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=")
-  .then((response) => response.json())
-  .then((data) => console.log(data));
+
+
+
+
+ 
